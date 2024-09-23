@@ -3,7 +3,7 @@
   "author": "ADO Software",
   "description": "A kiosk-mode app for reloading OneCard funds at Madison College.",
   "version": "1.0.0",
-  "main": "main.js",
+  "main": "src/index.js",
   "config": {
     "forge": {
       "packagerConfig": {
@@ -17,7 +17,6 @@
             "authors": "ADO Software",
             "exe": "ReloaderKiosk.exe",
             "setupExe": "ReloaderKioskSetup.exe",
-            "setupIcon": "./path/to/icon.ico",
             "noMsi": true
           }
         },
