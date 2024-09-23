@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0;url=https://onecard.madisoncollege.edu">
-  <title>Redirecting...</title>
-  <script src="node_modules/jquery/dist/jquery.min.js"></script>
-
+    <meta charset="UTF-8">
+    <title>OneCard Kiosk</title>
+    <style>
+        /* Ensure the iframe takes up the full window */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
-
 <body>
-  <p>Redirecting to OneCard. If you are not redirected, <a href="https://onecard.madisoncollege.edu">click here</a>.</p>
+    <!-- Embed the OneCard website in an iframe -->
+    <iframe src="https://onecard.madisoncollege.edu"></iframe>
 </body>
-
 </html>
