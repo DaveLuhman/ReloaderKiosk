@@ -5,7 +5,7 @@ let mainWindow;
 function createWindow() {
 	mainWindow = new BrowserWindow({
 		fullscreen: true,
-		kiosk: true, // Enforces kiosk mode
+		// kiosk: true, // Enforces kiosk mode
 		webPreferences: {
 			nodeIntegration: true, // Needed for loading local files
 			contextIsolation: false,
@@ -15,7 +15,7 @@ function createWindow() {
 	mainWindow.loadFile("./src/index.html"); // Load the HTML file
 
 	// Optional: Hide the menu bar to further lock the window down
-	mainWindow.setMenu(null);
+	// mainWindow.setMenu(null);
 
 	mainWindow.on("closed", () => {
 		mainWindow = null;
