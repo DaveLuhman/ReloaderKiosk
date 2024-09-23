@@ -2,6 +2,7 @@ const { app, BrowserWindow, session } = require('electron');
 
 let mainWindow;
 let idleTimeout;
+let hasStarted = false; // Flag to track if the user has started interacting
 const IDLE_TIME_LIMIT = 5 * 60 * 1000; // Set idle time limit to 5 minutes (in milliseconds)
 
 function createWindow() {
@@ -19,17 +20,24 @@ function createWindow() {
     // Hide menu bar to further lock down the window
     mainWindow.setMenu(null);
 
-    mainWindow.on('closed', () => {
+    mainWindow.on('closed', function () {
         mainWindow = null;
     });
 
-    // Reset idle timer whenever there's user activity
-    setupIdleTimeout();
-    mainWindow.webContents.on('before-input-event', resetIdleTimer);
-    mainWindow.webContents.on('dom-ready', resetIdleTimer);  // Reset on page load
+    // Listen for first interaction to start the idle timer
+    mainWindow.webContents.on('before-input-event', startIdleTimerOnInteraction);
+    mainWindow.webContents.on('cursor-changed', startIdleTimerOnInteraction);
+}
 
-    // Optional: Capture mouse and keyboard input as activity
-    mainWindow.webContents.on('cursor-changed', resetIdleTimer);
+// Function to start the idle timer on first interaction
+function startIdleTimerOnInteraction() {
+    if (!hasStarted) {
+        hasStarted = true;  // Set flag to true after first interaction
+        console.log('User has started interacting. Idle timer started.');
+        resetIdleTimer();    // Start the idle timer
+    } else {
+        resetIdleTimer();    // Reset idle timer on subsequent interactions
+    }
 }
 
 // Set up the idle timeout
@@ -53,7 +61,8 @@ function handleIdleTimeout() {
             console.log("Cache cleared.");
         });
 
-        // Destroy the current window and recreate it
+        // Reset the flag and destroy the current window
+        hasStarted = false;
         mainWindow.close();
         createWindow();
     }
@@ -61,13 +70,13 @@ function handleIdleTimeout() {
 
 app.whenReady().then(createWindow);
 
-app.on('window-all-closed', () => {
+app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
         app.quit();
     }
 });
 
-app.on('activate', () => {
+app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
     }
