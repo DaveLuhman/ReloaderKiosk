@@ -1,10 +1,44 @@
 {
-  "name": "kiosk-app",
-  "productName": "kiosk-app",
+  "name": "reloader_kiosk",
+  "author": "ADO Software",
+  "description": "A kiosk-mode app for reloading OneCard funds at Madison College.",
   "version": "1.0.0",
-  "description": "My Electron application description",
-  "main": "src/index.js",
-  "scripts": {
+  "main": "main.js",
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "name": "ReloaderKiosk"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "ReloaderKiosk",
+            "authors": "ADO Software",
+            "exe": "ReloaderKiosk.exe",
+            "setupExe": "ReloaderKioskSetup.exe",
+            "setupIcon": "./path/to/icon.ico",
+            "noMsi": true
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  },
+    "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
@@ -23,10 +57,6 @@
     "electron": "32.1.2"
   },
   "keywords": [],
-  "author": {
-    "name": "Dave Luhman",
-    "email": "dave@ado.software"
-  },
   "license": "MIT",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
