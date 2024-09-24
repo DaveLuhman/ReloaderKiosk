@@ -122,8 +122,9 @@ function handleIdleTimeout() {
 		// Clear local storage and cookies
 		session.defaultSession
 			.clearStorageData({
-				storages: ["localstorage", "cookies"], // This clears both local storage and cookies
+                storages: ['localstorage', 'cookies', 'sessionstorage', 'indexdb'] // clears all local storage containers
 			})
+            
 			.then(() => {
 				console.log("Local storage and cookies cleared.");
 			})
