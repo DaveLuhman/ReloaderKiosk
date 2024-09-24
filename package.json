@@ -7,7 +7,8 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "name": "ReloaderKiosk"
+        "name": "ReloaderKiosk",
+        "icon": "./img/kiosk.png"
       },
       "makers": [
         {
