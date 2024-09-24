@@ -10,16 +10,11 @@ module.exports = {
 		{
 			name: "@electron-forge/maker-wix",
 			config: {
-				ui: {
-					chooseDirectory: true, // Let user choose the install directory
-					template: "Minimal", // Set to Minimal for simple install UI, or leave out for default
-				},
 				description:
 					"A kiosk-mode app for reloading OneCard funds at Madison College.",
 				manufacturer: "ADO Software",
 				shortcutFolderName: "ReloaderKiosk",
 				outputDirectory: "./out/x64", // Where the output installer files are saved
-				appUserModelId: "com.adosoftware.reloaderkiosk", // Unique app ID
 			},
 		},
 		{
