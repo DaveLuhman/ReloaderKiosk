@@ -47,7 +47,7 @@ document.getElementById('card_expiry_year').dispatchEvent(new Event('change'));
         console.error('HID Device not found');
     }
 
-
+    }
 
     mainWindow.loadURL('https://onecard.madisoncollege.edu');
 
@@ -75,7 +75,7 @@ mainWindow.webContents.on('before-input-event', (event, input) => {
         }
     }
 });
-}
+
 
 // Function to start the idle timer on first interaction
 function startIdleTimerOnInteraction() {
