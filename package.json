@@ -12,13 +12,17 @@
       },
       "makers": [
         {
-          "name": "@electron-forge/maker-squirrel",
+          "name": "@electron-forge/maker-wix",
           "config": {
-            "name": "ReloaderKiosk",
-            "authors": "ADO Software",
-            "exe": "ReloaderKiosk.exe",
-            "setupExe": "ReloaderKioskSetup.exe",
-            "noMsi": true
+            "ui": {
+              "chooseDirectory": true,
+              "template": "Minimal"
+            },
+            "description": "A kiosk-mode app for reloading OneCard funds at Madison College.",
+            "manufacturer": "ADO Software",
+            "shortcutFolderName": "ReloaderKiosk",
+            "outputDirectory": "./out/x64",
+            "appUserModelId": "com.adosoftware.reloaderkiosk"
           }
         },
         {
