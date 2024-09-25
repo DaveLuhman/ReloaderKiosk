@@ -1,6 +1,6 @@
 const { app, BrowserWindow, session } = require("electron");
 const HID = require("node-hid");
-
+if( require("electron-squirrel-startup")) app.quit();
 let mainWindow;
 let idleTimeout;
 let hasStarted = false; // Flag to track if the user has started interacting
