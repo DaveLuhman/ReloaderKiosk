@@ -29,7 +29,7 @@ function createWindow() {
 	mainWindow.on("closed", () => {
 		mainWindow = null;
 		// Unregister F24 when window is closed
-		globalShortcut.unregister("F24");
+		console.log('Closing Window')
 	});
 
 	// Listen for first interaction to start the idle timer
@@ -41,10 +41,30 @@ function createWindow() {
 app.whenReady().then(() => {
 	createWindow();
 
-	// Register globalShortcut for F24 outside of the window lifecycle
+	console.log("Register globalShortcut for F24 outside of the window lifecycle")
 	globalShortcut.register("F24", () => {
 		console.log("Manually refreshing session due to keystroke F24");
-		handleIdleTimeout();
+		session.defaultSession.clearCache().then(() => {
+			console.log("Cache cleared.");
+		});
+
+		// Clear local storage and cookies
+		session.defaultSession
+			.clearStorageData({
+				storages: ["localstorage", "cookies", "sessionstorage", "indexdb"], // clears all local storage containers
+			})
+			.then(() => {
+				console.log("Local storage and cookies cleared.");
+			})
+			.catch((err) => {
+				console.error("Error clearing storage data:", err);
+			});
+
+		// Reset the flag and destroy the current window
+		hasStarted = false;
+		BrowserWindow.getAllWindows()[0].close()
+		console.log('attempting to close the main window before reopening it')
+		createWindow(); // Reopen the window
 	});
 });
 
