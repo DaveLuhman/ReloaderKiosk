@@ -26,12 +26,9 @@ function createWindow() {
 	// Hide menu bar to further lock down the window
 	mainWindow.setMenu(null);
 
-	// Register globalShortcut for F24 after window is created
-	registerGlobalShortcuts();
-
 	mainWindow.on("closed", () => {
 		mainWindow = null;
-		// Unregister F24 to avoid it being tied to a closed window
+		// Unregister F24 when window is closed
 		globalShortcut.unregister("F24");
 	});
 
@@ -40,13 +37,29 @@ function createWindow() {
 	mainWindow.webContents.on("cursor-changed", startIdleTimerOnInteraction);
 }
 
-// Register the global F24 shortcut to refresh the session
-function registerGlobalShortcuts() {
+// Register global shortcuts once the app is ready
+app.whenReady().then(() => {
+	createWindow();
+
+	// Register globalShortcut for F24 outside of the window lifecycle
 	globalShortcut.register("F24", () => {
 		console.log("Manually refreshing session due to keystroke F24");
-		handleIdleTimeout(); // Manually trigger idle timeout
+		handleIdleTimeout();
 	});
-}
+});
+
+app.on("window-all-closed", () => {
+	if (process.platform !== "darwin") {
+		globalShortcut.unregisterAll();
+		app.quit();
+	}
+});
+
+app.on("activate", () => {
+	if (BrowserWindow.getAllWindows().length === 0) {
+		createWindow();
+	}
+});
 
 // Function to start the idle timer on first interaction
 function startIdleTimerOnInteraction() {
@@ -106,18 +119,3 @@ function handleIdleTimeout() {
 		createWindow(); // Reopen the window
 	}
 }
-
-app.whenReady().then(createWindow);
-
-app.on("window-all-closed", () => {
-	if (process.platform !== "darwin") {
-		globalShortcut.unregisterAll();
-		app.quit();
-	}
-});
-
-app.on("activate", () => {
-	if (BrowserWindow.getAllWindows().length === 0) {
-		createWindow();
-	}
-});
