@@ -59,8 +59,6 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1",
-    "jquery": "^3.7.1",
-    "node-hid": "^3.1.0"
+    "electron-squirrel-startup": "^1.0.1"
   }
 }

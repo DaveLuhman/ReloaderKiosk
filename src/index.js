@@ -3,7 +3,7 @@ if (require("electron-squirrel-startup")) app.quit();
 let mainWindow;
 let idleTimeout;
 let hasStarted = false; // Flag to track if the user has started interacting
-const IDLE_TIME_LIMIT = 2 * 60 * 1000; // Set idle time limit to 5 minutes (in milliseconds)
+const IDLE_TIME_LIMIT = 90 * 1000; // Set idle time limit to 1.5 minutes (in milliseconds)
 
 function createWindow() {
 	mainWindow = new BrowserWindow({
@@ -22,9 +22,13 @@ function createWindow() {
 	});
 	// Hide menu bar to further lock down the window
 	mainWindow.setMenu(null);
-
+	globalShortcut.register("F24", () => {
+		console.log("Manually refreshing session due to keystroke F24");
+		handleIdleTimeout();
+	});
 	mainWindow.on("closed", () => {
 		mainWindow = null;
+		globalShortcut.unregister("F24");
 	});
 
 	// Listen for first interaction to start the idle timer
@@ -90,11 +94,11 @@ function handleIdleTimeout() {
 		createWindow(); // Reopen the window
 	}
 }
-
 app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
 	if (process.platform !== "darwin") {
+		globalShortcut.unregisterAll();
 		app.quit();
 	}
 });
@@ -103,5 +107,4 @@ app.on("activate", () => {
 	if (BrowserWindow.getAllWindows().length === 0) {
 		createWindow();
 	}
-	globalShortcut.register("F24", handleIdleTimeout);
 });

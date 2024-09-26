@@ -12,7 +12,6 @@ const makeInstaller = async () => {
 			owners: "ADO Software",
 			version: "1.0.1-Release",
 			name: "ReloaderKiosk",
-			iconUrl: "./img/kiosk.ico",
 			setupIcon: "./img/kiosk.ico",
 			description:
 				"A kiosk-mode app for reloading OneCard funds at Madison College",
