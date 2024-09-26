@@ -1,5 +1,5 @@
 const { app, BrowserWindow, session, globalShortcut } = require("electron");
-if( require("electron-squirrel-startup")) app.quit();
+if (require("electron-squirrel-startup")) app.quit();
 let mainWindow;
 let idleTimeout;
 let hasStarted = false; // Flag to track if the user has started interacting
@@ -16,7 +16,10 @@ function createWindow() {
 	});
 
 	mainWindow.loadURL("https://onecard.madisoncollege.edu");
-
+	mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+		console.log(`Blocked opening a new window to ${url}`);
+		return { action: "deny" }; // Prevents the new window from being created
+	});
 	// Hide menu bar to further lock down the window
 	mainWindow.setMenu(null);
 
@@ -27,7 +30,6 @@ function createWindow() {
 	// Listen for first interaction to start the idle timer
 	mainWindow.webContents.on("before-input-event", startIdleTimerOnInteraction);
 	mainWindow.webContents.on("cursor-changed", startIdleTimerOnInteraction);
-
 }
 
 // Function to start the idle timer on first interaction
@@ -72,7 +74,7 @@ function handleIdleTimeout() {
 		// Clear local storage and cookies
 		session.defaultSession
 			.clearStorageData({
-                storages: ['localstorage', 'cookies', 'sessionstorage', 'indexdb'] // clears all local storage containers
+				storages: ["localstorage", "cookies", "sessionstorage", "indexdb"], // clears all local storage containers
 			})
 
 			.then(() => {
@@ -101,5 +103,5 @@ app.on("activate", () => {
 	if (BrowserWindow.getAllWindows().length === 0) {
 		createWindow();
 	}
-	globalShortcut.register('F24', handleIdleTimeout)
-})
+	globalShortcut.register("F24", handleIdleTimeout);
+});
