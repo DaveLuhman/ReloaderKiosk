@@ -16,18 +16,22 @@ function createWindow() {
 	});
 
 	mainWindow.loadURL("https://onecard.madisoncollege.edu");
+
+	// Prevent new windows from being opened
 	mainWindow.webContents.setWindowOpenHandler(({ url }) => {
 		console.log(`Blocked opening a new window to ${url}`);
-		return { action: "deny" }; // Prevents the new window from being created
+		return { action: "deny" };
 	});
+
 	// Hide menu bar to further lock down the window
 	mainWindow.setMenu(null);
-	globalShortcut.register("F24", () => {
-		console.log("Manually refreshing session due to keystroke F24");
-		handleIdleTimeout();
-	});
+
+	// Register globalShortcut for F24 after window is created
+	registerGlobalShortcuts();
+
 	mainWindow.on("closed", () => {
 		mainWindow = null;
+		// Unregister F24 to avoid it being tied to a closed window
 		globalShortcut.unregister("F24");
 	});
 
@@ -36,13 +40,21 @@ function createWindow() {
 	mainWindow.webContents.on("cursor-changed", startIdleTimerOnInteraction);
 }
 
+// Register the global F24 shortcut to refresh the session
+function registerGlobalShortcuts() {
+	globalShortcut.register("F24", () => {
+		console.log("Manually refreshing session due to keystroke F24");
+		handleIdleTimeout(); // Manually trigger idle timeout
+	});
+}
+
 // Function to start the idle timer on first interaction
 function startIdleTimerOnInteraction() {
 	if (!hasStarted) {
 		hasStarted = true; // Set flag to true after first interaction
 		console.log("User has started interacting. Idle timer started.");
 
-		// General error handler
+		// Error handling
 		process.on("uncaughtException", (err) => {
 			console.error("Uncaught Exception:", err);
 		});
@@ -50,6 +62,7 @@ function startIdleTimerOnInteraction() {
 		process.on("unhandledRejection", (reason, promise) => {
 			console.error("Unhandled Rejection at:", promise, "reason:", reason);
 		});
+
 		resetIdleTimer(); // Start the idle timer
 	} else {
 		resetIdleTimer(); // Reset idle timer on subsequent interactions
@@ -80,7 +93,6 @@ function handleIdleTimeout() {
 			.clearStorageData({
 				storages: ["localstorage", "cookies", "sessionstorage", "indexdb"], // clears all local storage containers
 			})
-
 			.then(() => {
 				console.log("Local storage and cookies cleared.");
 			})
@@ -94,6 +106,7 @@ function handleIdleTimeout() {
 		createWindow(); // Reopen the window
 	}
 }
+
 app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
